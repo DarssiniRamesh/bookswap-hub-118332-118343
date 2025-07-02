@@ -1,13 +1,18 @@
 /* CSS Variables for Theme Management */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
+  /* BookSwap Palette */
+  --brand-primary: #4F8A8B;
+  --brand-secondary: #FBD46D;
+  --brand-accent: #F67280;
+  --bg-primary: #fff;
   --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
+  --text-primary: #1A1A1A;
+  --text-secondary: #4F8A8B;
   --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  --button-bg: var(--brand-primary);
+  --button-text: #fff;
+  --card-bg: #fff;
+  --card-border: #eee;
 }
 
 [data-theme="dark"] {
