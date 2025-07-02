@@ -18,7 +18,7 @@ export function AppProvider({ children }) {
   const [books, setBooks] = useState([]);
   const [bookLoading, setBookLoading] = useState(false);
 
-  // Swaps
+  // Swaps (merge sent and received)
   const [swaps, setSwaps] = useState([]);
   const [swapLoading, setSwapLoading] = useState(false);
 
@@ -26,7 +26,7 @@ export function AppProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
   const [notifLoading, setNotifLoading] = useState(false);
 
-  // Load user on token change or init
+  // On token, fetch "me" user from backend
   useEffect(() => {
     if (token) {
       api.me(token)
@@ -44,14 +44,15 @@ export function AppProvider({ children }) {
   }, [token]);
 
   // Auth methods
+  // The backend expects login by "username" (which can be email or username in API)
   const login = async (email, password) => {
     setAuthLoading(true);
     try {
       const resp = await api.login({ email, password });
       setToken(resp.access_token);
       localStorage.setItem("jwt", resp.access_token);
-      setUser(resp.user || null);
       setAuthLoading(false);
+      // No user field, need to refetch user afterwards
       return { ok: true };
     } catch (error) {
       setAuthLoading(false);
@@ -68,7 +69,11 @@ export function AppProvider({ children }) {
   const register = async (data) => {
     setAuthLoading(true);
     try {
-      await api.register(data);
+      await api.register({
+        ...data,
+        username: data.name || data.username,
+        full_name: data.name || data.full_name || undefined,
+      });
       setAuthLoading(false);
       return { ok: true };
     } catch (error) {
@@ -78,10 +83,10 @@ export function AppProvider({ children }) {
   };
 
   // Book methods
-  const fetchBooks = async (q = "") => {
+  const fetchBooks = async () => {
     setBookLoading(true);
     try {
-      const items = await api.listBooks(q, token);
+      const items = await api.listBooks("", token);
       setBooks(items);
       setBookLoading(false);
     } catch (e) {
@@ -89,19 +94,26 @@ export function AppProvider({ children }) {
     }
   };
 
-  // Swap methods
+  // Swap methods -- combine sent and received swaps for display
   const fetchSwaps = async () => {
     setSwapLoading(true);
     try {
-      const items = await api.listSwaps(token);
-      setSwaps(items);
+      const sent = await api.listSentSwaps(token);
+      const rec = await api.listReceivedSwaps(token);
+      // Annotate ownership/sender for UI
+      const merged =
+        [
+          ...(sent?.map(s => ({ ...s, direction: "sent" })) || []),
+          ...(rec?.map(s => ({ ...s, direction: "received" })) || [])
+        ].sort((b, a) => new Date(a.requested_at) - new Date(b.requested_at));
+      setSwaps(merged);
       setSwapLoading(false);
     } catch (e) {
       setSwapLoading(false);
     }
   };
 
-  // Notification methods
+  // Notifications
   const fetchNotifications = async () => {
     setNotifLoading(true);
     try {

@@ -19,9 +19,9 @@ function Notifications() {
         <ul className="notification-list">
           {notifications.length === 0 && <li>No notifications.</li>}
           {notifications.map(n => (
-            <li key={n.id} className={n.read ? "read" : "unread"}>
+            <li key={n.id} className={n.is_read ? "read" : "unread"}>
               <span>{n.message} <small style={{ color: "#888" }}>{new Date(n.created_at).toLocaleString()}</small></span>
-              {!n.read && <button className="btn btn-accent" style={{ marginLeft: 10 }} onClick={() => markAsRead(n.id)}>Mark as read</button>}
+              {!n.is_read && <button className="btn btn-accent" style={{ marginLeft: 10 }} onClick={() => markAsRead(n.id)}>Mark as read</button>}
             </li>
           ))}
         </ul>

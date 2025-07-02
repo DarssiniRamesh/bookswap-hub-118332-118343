@@ -5,7 +5,7 @@ import { api } from "../api";
 
 function CreateBook() {
   const { token, fetchBooks } = useApp();
-  const [form, setForm] = useState({ title: "", author: "", genre: "", description: "", cover_url: "" });
+  const [form, setForm] = useState({ title: "", author: "", description: "" });
   const [err, setErr] = useState("");
   const navigate = useNavigate();
 
@@ -28,13 +28,9 @@ function CreateBook() {
         <label>Title</label>
         <input required value={form.title} onChange={e => setForm(v => ({ ...v, title: e.target.value }))} />
         <label>Author</label>
-        <input required value={form.author} onChange={e => setForm(v => ({ ...v, author: e.target.value }))} />
-        <label>Genre</label>
-        <input required value={form.genre} onChange={e => setForm(v => ({ ...v, genre: e.target.value }))} />
+        <input value={form.author} onChange={e => setForm(v => ({ ...v, author: e.target.value }))} />
         <label>Description</label>
         <textarea value={form.description} onChange={e => setForm(v => ({ ...v, description: e.target.value }))} />
-        <label>Cover Image URL</label>
-        <input value={form.cover_url} onChange={e => setForm(v => ({ ...v, cover_url: e.target.value }))} />
         {err && <div className="error">{err}</div>}
         <button className="btn btn-primary" type="submit">Submit</button>
       </form>

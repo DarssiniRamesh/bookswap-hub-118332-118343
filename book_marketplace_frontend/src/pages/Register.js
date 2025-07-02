@@ -11,6 +11,7 @@ function Register() {
   async function handleSubmit(e) {
     e.preventDefault();
     setErr("");
+    // Backend expects username, email, and password, optional full_name.
     const res = await register(form);
     if (res.ok) navigate("/login");
     else setErr(res.error);

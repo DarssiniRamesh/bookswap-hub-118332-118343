@@ -12,6 +12,7 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     setErr("");
+    // email could be username or email for backend login
     const res = await login(email, password);
     if (res.ok) navigate("/books");
     else setErr(res.error);

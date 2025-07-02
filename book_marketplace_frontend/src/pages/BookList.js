@@ -22,12 +22,11 @@ function BookList() {
         {bookLoading ? <div>Loading...</div> : books.length === 0 ? <div>No books found.</div> : (
           books.map(book =>
             <Link to={`/books/${book.id}`} key={book.id} className="card book-card">
-              <img src={book.cover_url || 'https://via.placeholder.com/128x180?text=No+Cover'} alt={book.title} width={100} height={140} />
+              <img src={'https://via.placeholder.com/128x180?text=No+Cover'} alt={book.title} width={100} height={140} />
               <div>
                 <strong>{book.title}</strong>
                 <div>{book.author}</div>
-                <div style={{ fontSize: 13 }}>{book.genre}</div>
-                <div style={{ fontSize: 12, color: "#888" }}>{book.owner_name}</div>
+                <div style={{ fontSize: 12, color: "#888" }}>Owner ID: {book.owner_id}</div>
               </div>
             </Link>
           )

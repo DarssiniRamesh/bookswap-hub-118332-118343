@@ -23,7 +23,7 @@ function BookDetail() {
   async function handleSwap() {
     setSwapOk("");
     try {
-      await api.createSwap({ book_id: id }, token);
+      await api.createSwap({ book_id: Number(id) }, token);
       setSwapOk("Swap request sent!");
     } catch (e) {
       setSwapOk(e.message || "Unable to request swap.");
@@ -33,13 +33,12 @@ function BookDetail() {
   return (
     <div className="container" style={{ maxWidth: 600 }}>
       <div style={{ display: "flex", gap: 24 }}>
-        <img src={book.cover_url || 'https://via.placeholder.com/128x180?text=No+Cover'} alt={book.title} width={130} height={180} />
+        <img src={'https://via.placeholder.com/128x180?text=No+Cover'} alt={book.title} width={130} height={180} />
         <div style={{ flex: 1 }}>
           <h2>{book.title}</h2>
           <p>by <strong>{book.author}</strong></p>
-          <p><b>Genre:</b> {book.genre}</p>
           <p><b>Description:</b> {book.description || <em>-</em>}</p>
-          <p><b>Owner:</b> {book.owner_name}</p>
+          <p><b>Owner:</b> <span>{book.owner_id}</span></p>
           {user && user.id !== book.owner_id && (
             <button className="btn btn-primary" onClick={handleSwap}>Request Swap</button>
           )}
